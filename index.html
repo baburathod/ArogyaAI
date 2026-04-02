@@ -1,6 +1,6 @@
 <!--
   ArogyaAI — AI-Based Remote Diagnosis System for Rural Healthcare
-  Built by Codecure26 | Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 / Sreenidhi Institute of Science and Technology
+  Built by Team Codecure26 |  Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 / Sreenidhi Institute of Science and Technology
   Codecure Hackathon | SPIRIT'26 | IIT (BHU) Varanasi | April 2026
   Members: Ramavath Babu · Dyaga Nishmitha 
 -->
@@ -74,7 +74,7 @@
     </div>
     <div class="em-share">
       <button onclick="shareLocation()" class="share-loc-btn">📍 Share My Location with Family</button>
-      <button type="button" onclick="sendSMSAlert()" class="share-loc-btn sms-alert-btn">📲 Send SMS Alert to Emergency Contact</button>
+      <button onclick="sendSMSAlert()" class="share-loc-btn" style="margin-top:8px;border-color:#f87171;color:#f87171;">📲 Send SMS Alert to Emergency Contact</button>
     </div>
   </div>
 </div>
@@ -191,14 +191,14 @@
 
     <!-- Low Literacy Mode Toggle -->
     <div class="feature-flag-bar">
-      <label for="lowLiteracyToggle">🗺️ Low-Literacy Mode</label>
-      <label class="toggle-switch" title="Toggle low-literacy mode">
-        <input type="checkbox" id="lowLiteracyToggle" onchange="toggleLowLiteracy()" title="Low-Literacy Mode"/>
+      <span>🗺️ Low-Literacy Mode</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="lowLiteracyToggle" onchange="toggleLowLiteracy()"/>
         <span class="toggle-slider"></span>
       </label>
-      <label for="voiceGuidanceToggle">🔇 Voice Guidance</label>
-      <label class="toggle-switch" title="Toggle voice guidance">
-        <input type="checkbox" id="voiceGuidanceToggle" title="Voice Guidance"/>
+      <span>🔇 Voice Guidance</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="voiceGuidanceToggle"/>
         <span class="toggle-slider"></span>
       </label>
     </div>
@@ -275,7 +275,7 @@
       </div>
 
       <!-- Body Map (Low Literacy) -->
-      <div class="body-map hidden" id="bodyMap">
+      <div class="body-map" id="bodyMap" style="display:none;">
         <div class="body-map-title">👆 Tap where it hurts</div>
         <div class="body-zones">
           <div class="bzone" onclick="addBodySymptom('head')" data-sym="headache">🧠 Head</div>
@@ -304,7 +304,7 @@
       <div class="severity-slider-wrap">
         <label class="slider-label">How severe are your symptoms?</label>
         <div class="severity-track">
-          <input type="range" min="1" max="10" value="5" id="severitySlider" class="sev-slider" title="Adjust symptom severity from mild to severe"/>
+          <input type="range" min="1" max="10" value="5" id="severitySlider" class="sev-slider"/>
           <div class="sev-markers"><span>Mild</span><span>Moderate</span><span>Severe</span></div>
         </div>
         <div class="sev-value" id="sevValue">5 / 10</div>
@@ -359,7 +359,7 @@
       <div class="diagnosis-title" id="diagnosisTitle"></div>
       <div class="explainable-ai-box" id="explainBox">
         <div class="explain-header">🧠 Why this diagnosis? <span class="explain-toggle" onclick="toggleExplain()">Show ▼</span></div>
-        <div class="explain-body hidden" id="explainBody"></div>
+        <div class="explain-body" id="explainBody" style="display:none;"></div>
       </div>
       <div class="diagnosis-desc" id="diagnosisDesc"></div>
       <ul class="advice-list" id="adviceList"></ul>
@@ -387,7 +387,7 @@
     <!-- Health Tips -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon-wrap green"><span class="icon-large">💡</span></div>
+        <div class="card-icon-wrap green"><span style="font-size:20px;">💡</span></div>
         <div><div class="card-title" id="tips-title">Health Awareness Engine</div><div class="card-sub">Personalized daily tips for you</div></div>
       </div>
       <div class="tips-grid" id="tipsGrid"></div>
@@ -410,12 +410,12 @@
         </div>
         <div class="form-row">
           <div class="form-group"><label>Gender</label>
-            <select id="pGender" class="form-input" title="Select your gender">
+            <select id="pGender" class="form-input">
               <option value="">Select</option><option>Male</option><option>Female</option><option>Other</option>
             </select>
           </div>
           <div class="form-group"><label>Blood Group</label>
-            <select id="pBlood" class="form-input" title="Select your blood group">
+            <select id="pBlood" class="form-input">
               <option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
             </select>
           </div>
@@ -426,11 +426,11 @@
         </div>
         <div class="form-group full"><label>Known Allergies</label><input type="text" id="pAllergies" placeholder="e.g. Penicillin, Peanuts" class="form-input"/></div>
         <div class="form-group full"><label>Existing Conditions</label><input type="text" id="pConditions" placeholder="e.g. Diabetes, Hypertension" class="form-input"/></div>
-        <button type="button" class="analyze-btn save-profile-btn" onclick="saveProfile()">💾 Save Profile</button>
+        <button class="analyze-btn" onclick="saveProfile()" style="margin-top:16px;">💾 Save Profile</button>
       </div>
     </div>
 
-    <div class="card" id="profileSummaryCard">
+    <div class="card" id="profileSummaryCard" style="display:none;">
       <div class="card-title">🪪 Health ID Card</div>
       <div class="health-id-card" id="healthIDCard"></div>
     </div>
@@ -470,7 +470,7 @@
         <div class="form-group"><label>Height (cm)</label><input type="number" id="vHeight" placeholder="e.g. 165" class="form-input" oninput="calcBMI()"/></div>
         <div class="form-group"><label>Weight (kg)</label><input type="number" id="vWeight" placeholder="e.g. 65" class="form-input" oninput="calcBMI()"/></div>
         <div class="bmi-result" id="bmiResult"></div>
-        <div class="bmi-gauge-wrap hidden" id="bmiGaugeWrap">
+        <div class="bmi-gauge-wrap" id="bmiGaugeWrap" style="display:none;">
           <div class="bmi-gauge"><div class="bmi-needle" id="bmiNeedle"></div></div>
           <div class="bmi-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
         </div>
@@ -481,7 +481,7 @@
         <div class="form-group"><label>BPM</label><input type="number" id="vHR" placeholder="e.g. 72" class="form-input" oninput="assessHR()"/></div>
         <div class="vital-result" id="hrResult"></div>
         <div class="vital-icon">🩺</div>
-        <div class="card-title card-title-spaced">Blood Pressure</div>
+        <div class="card-title" style="margin-top:16px;">Blood Pressure</div>
         <div class="form-row">
           <div class="form-group"><label>Systolic</label><input type="number" id="vSys" placeholder="120" class="form-input" oninput="assessBP()"/></div>
           <div class="form-group"><label>Diastolic</label><input type="number" id="vDia" placeholder="80" class="form-input" oninput="assessBP()"/></div>
@@ -493,7 +493,7 @@
         <div class="card-title">Temperature</div>
         <div class="form-group"><label>°F</label><input type="number" id="vTemp" placeholder="e.g. 98.6" class="form-input" oninput="assessTemp()"/></div>
         <div class="vital-result" id="tempResult"></div>
-        <div class="vital-icon vital-icon-spaced">🩸</div>
+        <div class="vital-icon" style="margin-top:16px;">🩸</div>
         <div class="card-title">Oxygen Saturation</div>
         <div class="form-group"><label>SpO2 %</label><input type="number" id="vSpo2" placeholder="e.g. 98" class="form-input" oninput="assessSpo2()"/></div>
         <div class="vital-result" id="spo2Result"></div>
@@ -524,14 +524,14 @@
       </div>
       <div class="form-row">
         <div class="form-group"><label>Frequency</label>
-          <select id="medFreq" class="form-input" title="Select medicine frequency">
+          <select id="medFreq" class="form-input">
             <option>Once daily</option><option>Twice daily</option><option>Three times daily</option><option>Every 8 hours</option><option>As needed</option>
           </select>
         </div>
-        <div class="form-group"><label>Time</label><input type="time" id="medTime" class="form-input" title="Select medicine time"/></div>
+        <div class="form-group"><label>Time</label><input type="time" id="medTime" class="form-input"/></div>
       </div>
       <div class="form-group full"><label>Notes (optional)</label><input type="text" id="medNotes" placeholder="e.g. Take after food" class="form-input"/></div>
-      <button type="button" class="analyze-btn add-medicine-btn" onclick="addMedicine()">➕ Add Medicine</button>
+      <button class="analyze-btn" onclick="addMedicine()" style="margin-top:8px;">➕ Add Medicine</button>
     </div>
     <div class="card">
       <div class="card-title">My Medicines</div>
@@ -542,7 +542,7 @@
       <div class="form-row">
         <div class="form-group"><label>Patient Weight (kg)</label><input type="number" id="dcWeight" placeholder="65" class="form-input" oninput="calcDosage()"/></div>
         <div class="form-group"><label>Medicine</label>
-          <select id="dcMed" class="form-input" onchange="calcDosage()" title="Select medicine for dosage calculation">
+          <select id="dcMed" class="form-input" onchange="calcDosage()">
             <option value="">Select</option>
             <option data-dose="15">Paracetamol (15mg/kg)</option>
             <option data-dose="10">Ibuprofen (10mg/kg)</option>
@@ -557,7 +557,7 @@
 
   <!-- ░░ SECTION: DOCTOR CONNECT ░░ -->
   <div class="section" id="doctor-content">
-    <div class="section-hero purple-gradient">
+    <div class="section-hero" style="background:linear-gradient(135deg,#4a0e8f,#2d0a6e);">
       <h2>🧑‍⚕️ Doctor Connect</h2>
       <p>Consult a real doctor · Free government telemedicine · eSanjeevani ready</p>
     </div>
@@ -565,14 +565,14 @@
     <!-- Auto Alert System -->
     <div class="card alert-card">
       <div class="card-header">
-        <div class="card-icon-wrap red"><span class="em-icon">🚨</span></div>
+        <div class="card-icon-wrap red"><span style="font-size:22px;">🚨</span></div>
         <div><div class="card-title">Auto Emergency Alert System</div><div class="card-sub">Send instant SMS + location to your emergency contact</div></div>
       </div>
       <div class="alert-status" id="alertStatus">
         <div class="alert-status-dot idle"></div>
         <span id="alertStatusText">Ready — alert will trigger on emergency detection</span>
       </div>
-      <div class="form-row alert-form-row">
+      <div class="form-row" style="margin-top:14px;">
         <div class="form-group">
           <label>Emergency Contact Name</label>
           <input type="text" id="alertName" class="form-input" placeholder="e.g. Ramesh (Brother)"/>
@@ -582,7 +582,7 @@
           <input type="tel" id="alertPhone" class="form-input" placeholder="+91 98765 43210"/>
         </div>
       </div>
-      <button class="analyze-btn alert-btn" onclick="saveAlertContact()">
+      <button class="analyze-btn" onclick="saveAlertContact()" style="margin-top:8px;background:linear-gradient(135deg,#dc2626,#991b1b);">
         <span class="btn-icon">📲</span> <span>Save & Test Alert System</span> <span class="btn-arrow">→</span>
       </button>
       <div class="alert-explain">
@@ -596,7 +596,7 @@
     <!-- eSanjeevani -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon-wrap blue"><span class="em-icon">🏥</span></div>
+        <div class="card-icon-wrap blue"><span style="font-size:22px;">🏥</span></div>
         <div><div class="card-title">Government Telemedicine</div><div class="card-sub">Free online doctor consultation — powered by eSanjeevani</div></div>
       </div>
       <div class="doctor-grid">
@@ -605,28 +605,28 @@
           <div class="doctor-name">General Physician</div>
           <div class="doctor-meta">Available 9AM – 9PM</div>
           <div class="doctor-badge free">Free</div>
-          <a href="https://esanjeevaniopd.in" target="_blank" rel="noopener noreferrer" class="doctor-btn">Connect via eSanjeevani</a>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
         </div>
         <div class="doctor-card">
           <div class="doctor-icon">👶</div>
           <div class="doctor-name">Paediatrician</div>
           <div class="doctor-meta">Child health specialist</div>
           <div class="doctor-badge free">Free</div>
-          <a href="https://esanjeevaniopd.in" target="_blank" rel="noopener noreferrer" class="doctor-btn">Connect via eSanjeevani</a>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
         </div>
         <div class="doctor-card">
           <div class="doctor-icon">🦷</div>
           <div class="doctor-name">Dental Advisor</div>
           <div class="doctor-meta">Oral health guidance</div>
           <div class="doctor-badge free">Free</div>
-          <a href="https://esanjeevaniopd.in" target="_blank" rel="noopener noreferrer" class="doctor-btn">Connect via eSanjeevani</a>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
         </div>
         <div class="doctor-card">
           <div class="doctor-icon">🧠</div>
           <div class="doctor-name">Mental Health</div>
           <div class="doctor-meta">Counselling & support</div>
           <div class="doctor-badge free">Free · iCall</div>
-          <a href="https://icallhelpline.org" target="_blank" rel="noopener noreferrer" class="doctor-btn">Connect via iCall</a>
+          <a href="https://icallhelpline.org" target="_blank" class="doctor-btn">Connect via iCall</a>
         </div>
       </div>
     </div>
@@ -634,12 +634,12 @@
     <!-- ASHA Worker -->
     <div class="card">
       <div class="card-header">
-        <div class="card-icon-wrap green"><span class="em-icon">👩‍⚕️</span></div>
+        <div class="card-icon-wrap green"><span style="font-size:22px;">👩‍⚕️</span></div>
         <div><div class="card-title">Your ASHA Health Worker</div><div class="card-sub">Community health worker at your doorstep</div></div>
       </div>
       <div class="asha-info">
-        <div class="asha-row"><span>📞</span><div><strong>National ASHA Helpline:</strong><br/>Call <a href="tel:104" class="link-emphasized">104</a> — Free, available in regional languages</div></div>
-        <div class="asha-row"><span>🏥</span><div><strong>Ayushman Bharat PM-JAY:</strong><br/>Free health coverage up to ₹5 lakh/year for eligible families. <a href="https://pmjay.gov.in" target="_blank" rel="noopener noreferrer" class="link-govt">Check eligibility →</a></div></div>
+        <div class="asha-row"><span>📞</span><div><strong>National ASHA Helpline:</strong><br/>Call <a href="tel:104" style="color:var(--g2);font-weight:700;">104</a> — Free, available in regional languages</div></div>
+        <div class="asha-row"><span>🏥</span><div><strong>Ayushman Bharat PM-JAY:</strong><br/>Free health coverage up to ₹5 lakh/year for eligible families. <a href="https://pmjay.gov.in" target="_blank" style="color:var(--g2);">Check eligibility →</a></div></div>
         <div class="asha-row"><span>📱</span><div><strong>eSanjeevani Mobile App:</strong><br/>Download for free video consultation with govt doctors</div></div>
       </div>
     </div>
@@ -647,14 +647,14 @@
 
   <!-- ░░ SECTION: PRIVACY ░░ -->
   <div class="section" id="privacy-content">
-    <div class="section-hero teal-gradient">
+    <div class="section-hero" style="background:linear-gradient(135deg,#0d4f4f,#063a3a);">
       <h2>🔐 Data Privacy & Security</h2>
       <p>Your health data stays on your device — we never sell or share it</p>
     </div>
 
     <div class="card">
       <div class="card-header">
-        <div class="card-icon-wrap green"><span class="icon-large">🛡️</span></div>
+        <div class="card-icon-wrap green"><span style="font-size:22px;">🛡️</span></div>
         <div><div class="card-title">Privacy Commitment</div><div class="card-sub">ArogyaAI is built privacy-first for rural communities</div></div>
       </div>
       <div class="privacy-grid">
@@ -753,8 +753,8 @@
           <circle cx="25" cy="22" r="3" fill="#FFD700"/>
         </svg>
         <div>
-          <div class="footer-hack-title">Codecure @ SPIRIT'26</div>
-          <div class="footer-hack-subtitle">IIT (BHU) Varanasi · Team Codecure26</div>
+          <div style="font-weight:700;font-size:13px;color:white;">Codecure @ SPIRIT'26</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">IIT (BHU) Varanasi · Team Codecure26</div>
         </div>
       </div>
       <div class="footer-hack-badge">
@@ -765,8 +765,8 @@
           <circle cx="25" cy="39" r="3" fill="white"/>
         </svg>
         <div>
-          <div class="footer-hack-title">Powered by Claude AI</div>
-          <div class="footer-hack-subtitle">Anthropic · claude-sonnet-4</div>
+          <div style="font-weight:700;font-size:13px;color:white;">Powered by Claude AI</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">Anthropic · claude-sonnet-4</div>
         </div>
       </div>
       <div class="footer-hack-badge">
@@ -777,8 +777,8 @@
           <circle cx="25" cy="25" r="6" fill="white"/>
         </svg>
         <div>
-          <div class="footer-hack-title">Ayushman Bharat Ready</div>
-          <div class="footer-hack-subtitle">PM-JAY · ABDM · eSanjeevani</div>
+          <div style="font-weight:700;font-size:13px;color:white;">Ayushman Bharat Ready</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">PM-JAY · ABDM · eSanjeevani</div>
         </div>
       </div>
     </div>
@@ -787,7 +787,7 @@
 
     <!-- Tech Stack Logos -->
     <div class="footer-tech">
-      <span class="tech-stack-label">Tech Stack</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;">Tech Stack</span>
       <div class="footer-tech-icons">
         <span title="HTML5"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#E44D26"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#F16529"/><path d="M10 10h6v4H10.4l.4 4H16v4H9.2z" fill="white"/><path d="M16 10h6l-.4 4H16v4h5.2l-.6 6L16 25.6v-4.2l2.8-.8.2-2H16z" fill="#EBEBEB"/></svg></span>
         <span title="CSS3"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#1572B6"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#33A9DC"/><path d="M10 10h12l-.4 4H10.8l.2 2h10.4l-1 8L16 25.6l-4.4-1.2-.2-3h3.8l.2 1.4 .6.2.6-.2.4-3H9.8z" fill="white"/></svg></span>
@@ -802,7 +802,7 @@
 
     <div class="footer-divider"></div>
     <div class="emergency-strip">🚑 <strong>108</strong> Ambulance &nbsp;·&nbsp; 🏥 <strong>104</strong> Health Helpline &nbsp;·&nbsp; 👮 <strong>100</strong> Police &nbsp;·&nbsp; 🆘 <strong>112</strong> National Emergency</div>
-    <div class="footer-copyright">© 2026 ArogyaAI · Codecure26 · MIT License · Not a substitute for professional medical advice</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;">© 2026 ArogyaAI · Team Codecure26 · MIT License · Not a substitute for professional medical advice</div>
   </div>
 </footer>
 
