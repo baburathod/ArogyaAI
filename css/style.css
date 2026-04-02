@@ -60,6 +60,7 @@ body {
   display: none;
   align-items: center;
   justify-content: center;
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 .emergency-overlay.show { display: flex; }
@@ -304,6 +305,7 @@ header {
   border-radius: 20px; padding: 6px 14px;
   font-size: 13px; cursor: pointer; color: var(--g1);
   font-weight: 500; transition: all 0.18s;
+  -webkit-user-select: none;
   user-select: none;
 }
 .sym-tag:hover { border-color: var(--g2); background: #d1f5e4; }
@@ -340,7 +342,7 @@ header {
 .severity-slider-wrap { margin-bottom: 14px; }
 .slider-label { font-size: 12px; color: var(--ink-muted); font-weight: 600; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
 .sev-slider {
-  width: 100%; -webkit-appearance: none; height: 6px;
+  width: 100%; -webkit-appearance: none; appearance: none; height: 6px;
   border-radius: 3px; outline: none; cursor: pointer;
   background: linear-gradient(90deg, var(--g3) 50%, var(--border) 50%);
 }
