@@ -10,7 +10,7 @@
 
 **🏆 Codecure AI Hackathon · SPIRIT'26 · IIT (BHU) Varanasi**
 
-[🔴 Live Demo](https://YOUR_USERNAME.github.io/ArogyaAI) · [📂 Repository](https://github.com/YOUR_USERNAME/ArogyaAI) · [📋 Google Form Submission](https://forms.gle/4zE1hQpAroMusHaz7)
+[🔴 Live Demo](https://baburathod.github.io/ArogyaAI) · [📂 Repository](https://github.com/baburathod/ArogyaAI) · [📋 Google Form Submission](https://forms.gle/4zE1hQpAroMusHaz7)
 
 </div>
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 👥 Team InnovX
+## 👥 Team Codecure26
 
 | Name | Role | College |
 |---|---|---|
@@ -176,7 +176,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/ArogyaAI.git
+git clone https://github.com/baburathod/ArogyaAI.git
 
 # Navigate into folder
 cd ArogyaAI
@@ -190,7 +190,7 @@ open index.html
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/ArogyaAI.git
+git clone https://github.com/baburathod/ArogyaAI.git
 cd ArogyaAI
 
 # Install dependencies
@@ -213,7 +213,7 @@ open http://localhost:3000
 
 The app is deployed at:
 ```
-https://YOUR_USERNAME.github.io/ArogyaAI
+https://baburathod.github.io/ArogyaAI
 ```
 
 No setup required — open and use instantly.
@@ -387,10 +387,10 @@ ArogyaAI provides general health guidance only and is **not a substitute for pro
 
 **Built with ❤️ for rural India**
 
-🌿 **ArogyaAI** · Team InnovX · Sreenidhi Institute of Science and Technology
+🌿 **ArogyaAI** · Team Codecure26 · Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 /Sreenidhi Institute of Science and Technology
 
 🏆 **Codecure AI Hackathon · SPIRIT'26 · IIT (BHU) Varanasi**
 
-*Powered by Claude AI · Ayushman Bharat Ready · First-Mile Healthcare Solution*
+*Powered by Team Codecure26 · Ayushman Bharat Ready · First-Mile Healthcare Solution*
 
 </div>
