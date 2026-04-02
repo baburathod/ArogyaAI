@@ -2,15 +2,14 @@
 
 <div align="center">
 
-![ArogyaAI Banner](https://img.shields.io/badge/ArogyaAI-Rural%20Health%20Assistant-0f8c51?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNDQgNDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQ0IiBoZWlnaHQ9IjQ0IiByeD0iMjIiIGZpbGw9IiMwZjhjNTEiLz48L3N2Zz4=)
-
+![ArogyaAI Banner](https://img.shields.io/badge/ArogyaAI-Rural%20Health%20Assistant-0f8c51?style=for-the-badge)
 ![Round](https://img.shields.io/badge/Codecure%20Hackathon-SPIRIT'26%20IIT--BHU-8B0000?style=for-the-badge)
 ![Team](https://img.shields.io/badge/Team-Codecure26-0f8c51?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Submitted-brightgreen?style=for-the-badge)
 
 **🏆 Codecure AI Hackathon · SPIRIT'26 · IIT (BHU) Varanasi**
 
-[🔴 Live Demo](https://baburathod.github.io/ArogyaAI) · [📂 Repository](https://github.com/baburathod/ArogyaAI) · [📋 Google Form Submission](https://forms.gle/4zE1hQpAroMusHaz7)
+[🔴 Live Demo](https://baburathod.github.io/ArogyaAI) · [📂 Repository](https://github.com/baburathod/ArogyaAI)
 
 </div>
 
@@ -18,7 +17,7 @@
 
 ## 📌 Project Title
 
-**ArogyaAI** — *Intelligent AI-Based Remote Diagnosis System for Rural Healthcare*
+**ArogyaAI** — *AI-Based Remote Diagnosis System for Rural Healthcare*
 
 ---
 
@@ -26,7 +25,7 @@
 
 > *"600 million rural Indians lack reliable access to healthcare. ArogyaAI puts a smart doctor in every pocket."*
 
-**ArogyaAI** is a voice-first, multilingual, AI-powered health assistant designed specifically for rural Indian communities. It bridges the critical gap between underserved populations and quality healthcare by combining Claude AI with a rule-based medical engine — all in a lightweight web app that works **offline**.
+**ArogyaAI** is a voice-first, multilingual, AI-powered health assistant designed for rural Indian communities. It bridges the critical healthcare gap by combining Claude AI with a rule-based medical engine — in a lightweight web app that works **offline**.
 
 ### 🎯 Problem We Solve
 
@@ -35,7 +34,7 @@
 | No doctors nearby | AI-powered symptom diagnosis 24/7 |
 | Language barriers | Full support for English, Hindi & Telugu |
 | Low literacy | Voice input + icon-based body map |
-| No internet connectivity | Offline PWA with local data storage |
+| No internet | Offline PWA with local data storage |
 | Delayed emergency response | Auto SMS alert + 108 ambulance integration |
 | No health records | Personal mini EHR stored on device |
 
@@ -45,178 +44,108 @@
 
 | Name | Role | College |
 |---|---|---|
-| **Ramavath Babu** | Team Leader · Frontend & Integration | Guru Ghasidas Vishwavidyalaya |
+| **Ramavath Babu** | Team Leader · Backend & API Integration | Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 |
 | **Dyaga Nishmitha** | AI/ML & Diagnosis Engine | Sreenidhi Institute of Science and Technology |
-| **Ramavath Babu** | Backend & API Integration | Guru Ghasidas Vishwavidyalaya |
 
 ---
 
 ## ✨ Key Features
 
-### 🧠 Core AI Features
-- **Hybrid AI Diagnosis** — Claude API (claude-sonnet-4) + rule-based fallback engine
-- **Explainable AI** — Shows *"Why this diagnosis?"* with full reasoning transparency
-- **AI Confidence Score** — Displays model confidence percentage per diagnosis
-- **Animated AI Loading Steps** — Visual 4-step thinking process
+### 🧠 AI Features
+- **Hybrid AI Diagnosis** — Claude API + rule-based fallback engine
+- **Explainable AI** — Shows *"Why this diagnosis?"* with full transparency
+- **AI Confidence Score** — Percentage confidence per diagnosis
+- **Animated Loading Steps** — 4-step visual AI thinking process
 
 ### 🎙️ Voice & Accessibility
-- **Voice-First Conversational Orb** — Tap to speak, AI responds like a virtual doctor
+- **Voice-First Conversational Orb** — Speak symptoms, AI responds like a doctor
 - **Web Speech API** — Supports en-IN, hi-IN, te-IN regional accents
-- **Low-Literacy Body Map** — Tap where it hurts (icon-based, no reading required)
-- **Text-to-Speech Guidance** — AI reads results aloud for non-literate users
+- **Low-Literacy Body Map** — Tap where it hurts, no typing needed
+- **Text-to-Speech** — AI reads results aloud
 
 ### 🌐 Multilingual Support
 - **3 Languages** — English, Hindi (हिंदी), Telugu (తెలుగు)
-- Instant UI switching including symptom tags, results, and advice
-- All medical advice culturally appropriate for rural India
+- Instant UI switching with culturally appropriate medical advice
 
 ### 🚨 Emergency System
-- **Smart Emergency Detection** — Detects 14+ critical keywords (chest pain, stroke, etc.)
-- **Emergency Overlay** — Full-screen alert with pulsing animation
-- **Auto SMS Alert** — Pre-fills SMS with condition + GPS location to family
+- **Smart Emergency Detection** — 14+ critical keywords detected instantly
+- **Emergency Overlay** — Full-screen pulsing alert
+- **Auto SMS Alert** — GPS location sent to family contact
 - **One-Tap Ambulance** — Direct call to 108
 
 ### 🏥 Smart Hospital Finder
-- **Condition-Matched Hospitals** — Recommends cardiology vs general vs ortho based on diagnosis
-- **OpenStreetMap Integration** — Free map, no API key, works offline-first
-- **Government PHC/CHC Priority** — Surfaces free government facilities first
-- **Direct Directions** — One tap to Google Maps navigation
+- **Condition-Matched** — Cardiology vs general vs ortho based on diagnosis
+- **OpenStreetMap** — Free map, no API key required
+- **Government PHC/CHC Priority** — Free facilities shown first
 
 ### 🌐 Offline PWA
 - **Service Worker** — Caches all app assets on first load
-- **localStorage EHR** — All health data stored locally, never sent to server
-- **Offline Banner** — Clear indicator when running without internet
-- **Sync-ready** — Architecture prepared for background sync when online
+- **localStorage EHR** — All data stored locally, never sent to server
 
-### 📋 Personal Health Record (Mini EHR)
-- **Patient Profile** — Name, age, blood group, allergies, emergency contact
-- **Health ID Card** — Printable digital health identity
-- **Diagnosis History** — Stores last 30 diagnoses with dates
-- **Severity Tracker Chart** — Visual bar chart of health over time
+### 📋 Personal Health Record
+- Patient profile, Health ID card, 30-diagnosis history
+- Severity tracker chart over time
 
 ### 💓 Vitals & BMI
-- BMI Calculator with animated gauge needle
-- Heart Rate assessment (bradycardia / tachycardia detection)
-- Blood Pressure classifier (low / pre-hypertension / hypertension)
-- Temperature & SpO2 (oxygen saturation) assessment
-- IoT-ready panel for smartwatch / BP monitor integration (future)
+- BMI Calculator, Heart Rate, Blood Pressure, Temperature, SpO2
 
 ### 💊 Medicine Reminders
 - Add medicines with dosage, frequency, time
-- Browser notification reminders
-- Weight-based dosage calculator (Paracetamol, Ibuprofen, Amoxicillin, ORS)
+- Weight-based dosage calculator
 
 ### 🧑‍⚕️ Doctor Connect
-- **eSanjeevani Integration** — Links to free government telemedicine
-- **ASHA Worker Helpline** — Direct 104 connection
-- **Auto Emergency Alert** — Saves emergency contact, triggers SMS on detection
-- **Ayushman Bharat PM-JAY** — Eligibility check link
+- eSanjeevani government telemedicine integration
+- ASHA Worker helpline · Ayushman Bharat PM-JAY link
 
 ### 🔐 Data Privacy
 - All data stored locally on device only
-- Basic Base64 encoding for sensitive fields
-- One-tap data export (JSON) and complete deletion
-- Zero ads, zero tracking, zero third-party data sharing
-- Full data transparency table shown to users
+- One-tap data export and deletion
+- Zero ads, zero tracking, zero third-party sharing
 
 ---
 
-## 🛠️ Tech Stack & Tools
+## 🛠️ Tech Stack
 
-### Frontend
-| Technology | Purpose |
+| Layer | Technology |
 |---|---|
-| HTML5 | App structure & semantic markup |
-| CSS3 | Premium green dashboard UI, animations, glassmorphism |
-| JavaScript (ES6+) | All client-side logic, modular file architecture |
-| Google Fonts (Syne + DM Sans) | Typography |
-
-### AI / Logic
-| Technology | Purpose |
-|---|---|
-| **Claude API** (claude-sonnet-4-20250514) | Primary AI diagnosis engine |
-| Rule-Based Engine (JS) | Offline fallback, 12+ condition database |
-| Hybrid Logic | Claude output + rule validation = more accurate results |
-
-### APIs & Services
-| Technology | Purpose |
-|---|---|
-| Web Speech API | Voice input (speech-to-text) in 3 languages |
-| SpeechSynthesis API | Text-to-speech voice guidance |
-| Geolocation API | User location for hospital finder |
-| OpenStreetMap Embed | Free map display, no API key |
-| Notification API | Medicine reminder alerts |
-
-### Backend
-| Technology | Purpose |
-|---|---|
-| Node.js | Server runtime |
-| Express.js | API server & static file hosting |
-| Claude API Proxy | Secure API key management server-side |
-
-### Development Tools
-| Tool | Purpose |
-|---|---|
-| VS Code | Primary IDE |
-| GitHub | Version control & hosting |
-| GitHub Pages | Live deployment |
-| Chrome DevTools | Testing & debugging |
-| Postman | API testing |
+| **Frontend** | HTML5, CSS3, JavaScript (ES6+) |
+| **Fonts** | Google Fonts — Syne + DM Sans |
+| **AI Engine** | Claude API (claude-sonnet-4) + Rule-Based JS fallback |
+| **Voice** | Web Speech API + SpeechSynthesis API |
+| **Maps** | OpenStreetMap Embed (free, no API key) |
+| **Location** | Geolocation API |
+| **Backend** | Node.js + Express.js |
+| **Storage** | localStorage (device only) |
+| **Offline** | Service Worker (PWA) |
+| **Tools** | VS Code, GitHub, GitHub Pages, Chrome DevTools |
 
 ---
 
 ## ⚙️ Installation & Setup
 
-### Prerequisites
-- Node.js v18+ installed
-- Git installed
-- Modern browser (Chrome recommended for voice features)
-
-### Option 1 — Run Frontend Only (Simplest)
-
+### Option 1 — Open Directly (No Setup)
 ```bash
-# Clone the repository
 git clone https://github.com/baburathod/ArogyaAI.git
-
-# Navigate into folder
 cd ArogyaAI
-
-# Open directly in browser — no server needed!
-open index.html
-# OR right-click index.html → Open with Live Server (VS Code extension)
+# Open index.html in Chrome
+# OR: right-click → Open with Live Server (VS Code)
 ```
 
-### Option 2 — Run with Backend Server
-
+### Option 2 — Run with Backend
 ```bash
-# Clone the repository
 git clone https://github.com/baburathod/ArogyaAI.git
 cd ArogyaAI
-
-# Install dependencies
 npm install
-
-# Set your Anthropic API key
 # Windows:
 set ANTHROPIC_API_KEY=your_api_key_here
-# Mac/Linux:
-export ANTHROPIC_API_KEY=your_api_key_here
-
-# Start the server
 npm start
-
-# Visit in browser
-open http://localhost:3000
+# Visit: http://localhost:3000
 ```
 
-### Option 3 — GitHub Pages (Live Demo)
-
-The app is deployed at:
+### Option 3 — Live Demo
 ```
 https://baburathod.github.io/ArogyaAI
 ```
-
-No setup required — open and use instantly.
 
 ---
 
@@ -224,28 +153,24 @@ No setup required — open and use instantly.
 
 ```
 ArogyaAI/
-│
-├── index.html              # Main app — 7-section dashboard structure
-├── sw.js                   # Service Worker for offline PWA
-├── package.json            # Node.js configuration
-│
+├── index.html              # Main app — 7-section dashboard
+├── sw.js                   # Service Worker — offline PWA
+├── package.json            # Node.js config
 ├── css/
-│   └── style.css           # Premium green UI — 837 lines of design
-│
+│   └── style.css           # Premium green UI
 ├── js/
-│   ├── app.js              # Main controller · navigation · offline detection
-│   ├── languages.js        # Multilingual system — EN / Hindi / Telugu
-│   ├── voice.js            # Conversational voice AI orb · Web Speech API
-│   ├── diagnosis.js        # Hybrid AI engine · Claude API · Explainable AI
-│   ├── hospitals.js        # Smart hospital finder · OpenStreetMap · condition matching
-│   ├── vitals.js           # BMI · Heart Rate · BP · Temperature · SpO2
+│   ├── app.js              # Main controller · navigation · offline
+│   ├── languages.js        # EN / Hindi / Telugu multilingual
+│   ├── voice.js            # Voice AI orb · Web Speech API
+│   ├── diagnosis.js        # Hybrid AI · Claude API · Explainable AI
+│   ├── hospitals.js        # Smart hospital finder · OpenStreetMap
+│   ├── vitals.js           # BMI · HR · BP · Temperature · SpO2
 │   ├── medicine.js         # Medicine reminders · dosage calculator
-│   ├── history.js          # Personal health record · EHR · severity chart
-│   ├── doctor.js           # Auto SMS alert · eSanjeevani · emergency contact
-│   └── privacy.js          # Data export · deletion · encryption · summary
-│
+│   ├── history.js          # Health record · EHR · severity chart
+│   ├── doctor.js           # SMS alert · eSanjeevani · emergency
+│   └── privacy.js          # Data export · deletion · encryption
 └── backend/
-    └── server.js           # Express.js API proxy for Claude
+    └── server.js           # Express.js · Claude API proxy
 ```
 
 ---
@@ -253,116 +178,46 @@ ArogyaAI/
 ## 🏗️ Technical Workflow
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                         USER INPUT                              │
-│         Text  ·  Voice (Speech API)  ·  Body Map tap           │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    PREPROCESSING LAYER                          │
-│   Language Detection  ·  Emergency Keyword Scan  ·  Severity   │
-│   Slider Value  ·  Duration Selection  ·  Tag Normalization     │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-              ▼                         ▼
-┌─────────────────────┐    ┌─────────────────────────────────────┐
-│   CLAUDE AI ENGINE  │    │        RULE-BASED FALLBACK          │
-│  claude-sonnet-4    │    │   12-condition medical database      │
-│  Returns: JSON      │    │   Works 100% offline                │
-│  condition, severity│    │   Instant response                  │
-│  advice, confidence │    └──────────────┬──────────────────────┘
-│  why, isEmergency   │                   │
-└──────────┬──────────┘                   │
-           │                             │
-           └────────────┬────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    RESPONSE GENERATION                          │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐ │
-│  │ Severity     │  │ Explainable  │  │ Confidence Score      │ │
-│  │ Classification│  │ AI Reasoning │  │ (AI transparency)     │ │
-│  └──────────────┘  └──────────────┘  └───────────────────────┘ │
-│  ┌──────────────┐  ┌──────────────┐  ┌───────────────────────┐ │
-│  │ Health Advice│  │ Emergency    │  │ Auto SMS Alert        │ │
-│  │ (4-5 steps)  │  │ Overlay      │  │ (family notification) │ │
-│  └──────────────┘  └──────────────┘  └───────────────────────┘ │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                  HOSPITAL RECOMMENDATION                        │
-│  Geolocation API → OpenStreetMap → Condition-Matched Hospitals  │
-│  Cardiology / Emergency / Ortho / General — based on diagnosis  │
-└─────────────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    DATA PERSISTENCE                             │
-│         localStorage (Device Only) · Never sent to server       │
-│  Profile · History (30 records) · Medicines · Alert Contact     │
-└─────────────────────────────────────────────────────────────────┘
+User Input (Text / Voice / Body Map)
+        ↓
+Preprocessing (Language · Emergency Scan · Severity)
+        ↓
+   ┌────────────────────┐
+   ↓                    ↓
+Claude AI API      Rule-Based Fallback
+(Primary)          (Works Offline)
+   └────────┬───────────┘
+            ↓
+Response Generation
+(Severity · Explainable AI · Confidence · Advice · Emergency Alert)
+            ↓
+Hospital Recommendation
+(OpenStreetMap · Condition-Matched · Govt PHC Priority)
+            ↓
+Data Persistence
+(localStorage · Device Only · Never Sent to Server)
 ```
 
 ---
 
-## 📊 Judging Criteria — How We Score
+## 📊 Judging Criteria
 
-| Criteria | Our Implementation | Score |
-|---|---|---|
-| **Functionality** | 7 fully working sections · Voice · AI · Maps · EHR · Vitals · Meds · Privacy | ⭐⭐⭐⭐⭐ |
-| **Code Quality** | 15 modular files · Commented code · ES6+ standards · Clean separation of concerns | ⭐⭐⭐⭐⭐ |
-| **Scalability** | Offline-first · Multilingual · Backend API proxy · Ayushman Bharat API-ready | ⭐⭐⭐⭐⭐ |
-| **Innovation** | Explainable AI · Auto SMS alerts · Body map · Low-literacy mode · Hybrid AI | ⭐⭐⭐⭐⭐ |
-
----
-
-## 💡 Special Features Judges Don't Expect
-
-### 🏥 "First-Mile Healthcare Solution"
-ArogyaAI helps patients **before** they reach the hospital — enabling triage, emergency detection, and ambulance calling from any village with a smartphone.
-
-### 🌾 "Designed for Rural Constraints"
-Every design decision was made with rural users in mind:
-- Works on 2G/3G or completely offline
-- No account or registration needed
-- Icon-based navigation for low-literacy users
-- Voice input for users who can't type
-- Regional language support from day one
-
-### 🏛️ "Scalable to Government Systems"
-ArogyaAI is architected for future integration with:
-- **Ayushman Bharat PM-JAY** — health coverage API
-- **ABDM / ABHA Health ID** — digital health identity
-- **eSanjeevani** — government telemedicine platform
-- **HMIS** — Hospital Management Information System
-- **IoT devices** — smartwatch, BP monitor, glucometer
+| Criteria | Our Implementation |
+|---|---|
+| **Functionality** | 7 working sections · Voice · AI · Maps · EHR · Vitals · Meds · Privacy |
+| **Code Quality** | 15 modular files · Commented · ES6+ · Clean architecture |
+| **Scalability** | Offline-first · Multilingual · Ayushman Bharat API-ready |
+| **Innovation** | Explainable AI · Auto SMS · Body map · Low-literacy mode |
 
 ---
 
-## 🌍 Impact & Benefits
+## 🌍 Impact
 
 - **600M+ rural Indians** can access free AI health guidance
-- Reduces unnecessary hospital visits for mild conditions
-- Saves lives through rapid emergency detection and 108 escalation
-- Works on any ₹3,000 Android phone with Chrome browser
-- Zero cost for end users — completely free
-- Supports government's Digital Health Mission vision
-
----
-
-## 🔗 References & Resources
-
-- [World Health Organization — Rural Health](https://www.who.int)
-- [Government of India Data Portal](https://data.gov.in)
-- [PubMed — AI in Healthcare Research](https://pubmed.ncbi.nlm.nih.gov)
-- [Anthropic Claude API Documentation](https://docs.anthropic.com)
-- [eSanjeevani — Government Telemedicine](https://esanjeevaniopd.in)
-- [Ayushman Bharat PM-JAY](https://pmjay.gov.in)
-- [ABDM — Ayushman Bharat Digital Mission](https://abdm.gov.in)
+- Works on any ₹3,000 Android phone with Chrome
+- Zero cost for end users
+- Emergency detection can save lives
+- Ready for Ayushman Bharat, ABDM, eSanjeevani integration
 
 ---
 
@@ -379,7 +234,7 @@ ArogyaAI is architected for future integration with:
 
 ## ⚠️ Disclaimer
 
-ArogyaAI provides general health guidance only and is **not a substitute for professional medical advice, diagnosis, or treatment**. Always consult a qualified doctor for serious medical conditions.
+ArogyaAI provides general health guidance only and is **not a substitute for professional medical advice**. Always consult a qualified doctor for serious conditions.
 
 ---
 
@@ -387,7 +242,7 @@ ArogyaAI provides general health guidance only and is **not a substitute for pro
 
 **Built with ❤️ for rural India**
 
-🌿 **ArogyaAI** · Team Codecure26 · Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 /Sreenidhi Institute of Science and Technology
+🌿 **ArogyaAI** · Team Codecure26 · Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 / Sreenidhi Institute of Science and Technology
 
 🏆 **Codecure AI Hackathon · SPIRIT'26 · IIT (BHU) Varanasi**
 
