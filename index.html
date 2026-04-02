@@ -15,7 +15,7 @@
 </head>
 <body>
 
-<!-- ░░ EARLY FUNCTION SHIMS — prevents ReferenceError before JS files load ░░ -->
+<!--  EARLY FUNCTION SHIMS — prevents ReferenceError before JS files load  -->
 <script>
   // These are overridden by the real implementations in js/*.js files.
   // They exist here so onclick="..." attributes don't throw before scripts load.
@@ -56,12 +56,12 @@
   function showToast(msg)         { var t=document.createElement('div'); t.textContent=msg; Object.assign(t.style,{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',background:'#0c1a13',color:'white',padding:'10px 20px',borderRadius:'20px',fontSize:'13px',fontWeight:'600',zIndex:'9998'}); document.body.appendChild(t); setTimeout(function(){t.remove();},2500); }
 </script>
 
-<!-- ░░ OFFLINE BANNER ░░ -->
+<!-- OFFLINE BANNER  -->
 <div class="offline-bar" id="offlineBar">
   📡 You are offline — ArogyaAI is running in offline mode. Data will sync when connected.
 </div>
 
-<!-- ░░ EMERGENCY OVERLAY ░░ -->
+<!--  EMERGENCY OVERLAY  -->
 <div class="emergency-overlay" id="emergencyOverlay">
   <div class="emergency-modal">
     <div class="em-pulse">🚨</div>
@@ -79,7 +79,7 @@
   </div>
 </div>
 
-<!-- ░░ HEADER ░░ -->
+<!--  HEADER  -->
 <header>
   <div class="logo">
     <div class="logo-orb">
@@ -118,7 +118,7 @@
   </div>
 </header>
 
-<!-- ░░ HERO ░░ -->
+<!--  HERO  -->
 <div class="hero" id="section-home">
   <div class="hero-bg-mesh"></div>
   <div class="hero-content">
@@ -186,7 +186,7 @@
 
 <div class="main-wrap">
 
-  <!-- ░░ SECTION: HOME ░░ -->
+  <!--  SECTION: HOME  -->
   <div class="section active" id="home-content">
 
     <!-- Low Literacy Mode Toggle -->
@@ -395,7 +395,7 @@
 
   </div>
 
-  <!-- ░░ SECTION: PATIENT PROFILE ░░ -->
+  <!--  SECTION: PATIENT PROFILE  -->
   <div class="section" id="profile-content">
     <div class="section-hero green-gradient">
       <h2>👤 Patient Profile</h2>
@@ -457,7 +457,7 @@
     </div>
   </div>
 
-  <!-- ░░ SECTION: VITALS ░░ -->
+  <!--  SECTION: VITALS  -->
   <div class="section" id="vitals-content">
     <div class="section-hero amber-gradient">
       <h2>💓 Vitals & BMI Calculator</h2>
@@ -510,7 +510,7 @@
     </div>
   </div>
 
-  <!-- ░░ SECTION: MEDICINE ░░ -->
+  <!--  SECTION: MEDICINE  -->
   <div class="section" id="medicine-content">
     <div class="section-hero red-gradient">
       <h2>💊 Medicine Dosage & Reminders</h2>
@@ -555,7 +555,7 @@
     </div>
   </div>
 
-  <!-- ░░ SECTION: DOCTOR CONNECT ░░ -->
+  <!--  SECTION: DOCTOR CONNECT  -->
   <div class="section" id="doctor-content">
     <div class="section-hero" style="background:linear-gradient(135deg,#0369a1,#075985);">
       <h2>🧑‍⚕️ Doctor Connect</h2>
@@ -645,7 +645,7 @@
     </div>
   </div>
 
-  <!-- ░░ SECTION: PRIVACY ░░ -->
+  <!--  SECTION: PRIVACY  -->
   <div class="section" id="privacy-content">
     <div class="section-hero" style="background:linear-gradient(135deg,#374151,#111827);">
       <h2>🔐 Data Privacy & Security</h2>
@@ -721,7 +721,7 @@
 
 </div><!-- /main-wrap -->
 
-<!-- ░░ FOOTER ░░ -->
+<!--  FOOTER  -->
 <footer>
   <div class="footer-inner">
 
@@ -754,7 +754,7 @@
         </svg>
         <div>
           <div style="font-weight:700;font-size:13px;color:white;">Codecure @ SPIRIT'26</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.55);">IIT (BHU) Varanasi · Team InnovX</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">IIT (BHU) Varanasi · Team Codecure26 </div>
         </div>
       </div>
       <div class="footer-hack-badge">
@@ -802,7 +802,7 @@
 
     <div class="footer-divider"></div>
     <div class="emergency-strip">🚑 <strong>108</strong> Ambulance &nbsp;·&nbsp; 🏥 <strong>104</strong> Health Helpline &nbsp;·&nbsp; 👮 <strong>100</strong> Police &nbsp;·&nbsp; 🆘 <strong>112</strong> National Emergency</div>
-    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;">© 2026 ArogyaAI · Team InnovX · MIT License · Not a substitute for professional medical advice</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;">© 2026 ArogyaAI · Team Codecure26 · MIT License · Not a substitute for professional medical advice</div>
   </div>
 </footer>
 
