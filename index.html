@@ -1,0 +1,833 @@
+<!--
+  ArogyaAI — AI-Based Remote Diagnosis System for Rural Healthcare
+  Built by Codecure26 | Guru Ghasidas Vishwavidyalaya, Bilaspur , Koni, Bilaspur, Chhattisgarh 495009 / Sreenidhi Institute of Science and Technology
+  Codecure Hackathon | SPIRIT'26 | IIT (BHU) Varanasi | April 2026
+  Members: Ramavath Babu · Dyaga Nishmitha 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ArogyaAI — Intelligent Rural Health Assistant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ░░ EARLY FUNCTION SHIMS — prevents ReferenceError before JS files load ░░ -->
+<script>
+  // These are overridden by the real implementations in js/*.js files.
+  // They exist here so onclick="..." attributes don't throw before scripts load.
+  var currentLang  = 'en';
+  var selectedTags = [];
+  var currentDuration = 'Today';
+
+  function showSection(n)         { document.querySelectorAll('.section').forEach(s=>s.classList.remove('active')); var el=document.getElementById(n+'-content'); if(el)el.classList.add('active'); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll('[data-section="'+n+'"]').forEach(b=>b.classList.add('active')); }
+  function setLang(l)             { currentLang=l; document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active')); event&&event.target&&event.target.classList.add('active'); }
+  function closeEmergency()       { document.getElementById('emergencyOverlay').classList.remove('show'); }
+  function shareLocation()        { if(!navigator.geolocation){alert('Location not available');return;} navigator.geolocation.getCurrentPosition(function(p){var u='https://maps.google.com?q='+p.coords.latitude+','+p.coords.longitude; navigator.share?navigator.share({title:'My Location',text:'🚨 Emergency! My location: '+u}):navigator.clipboard.writeText(u).then(function(){alert('Location copied!');});},function(){alert('Could not get location.');});}
+  function sendSMSAlert()         { var c=JSON.parse(localStorage.getItem('arogyaAlertContact')||'null'); if(!c){alert('No emergency contact saved!\nGo to Doctor tab and add your emergency contact first.');return;} var msg='🚨 EMERGENCY from ArogyaAI — Please help immediately! Call 108 for ambulance.'; window.open('sms:'+c.phone+'?body='+encodeURIComponent(msg),'_blank'); }
+  function toggleLowLiteracy()    { var c=document.getElementById('lowLiteracyToggle'); document.getElementById('bodyMap').style.display=c&&c.checked?'block':'none'; }
+  function toggleConversation()   {}
+  function toggleVoice()          {}
+  function analyzeSymptoms()      { alert('Loading AI engine...'); }
+  function toggleTag(el,v)        { el.classList.toggle('selected'); if(el.classList.contains('selected')){if(!selectedTags.includes(v))selectedTags.push(v);}else{selectedTags=selectedTags.filter(function(t){return t!==v;});} document.getElementById('symptomInput').value=selectedTags.join(', '); }
+  function selectDuration(el,v)   { document.querySelectorAll('.dur-chip').forEach(function(c){c.classList.remove('selected');}); el.classList.add('selected'); currentDuration=v; }
+  function toggleExplain()        { var b=document.getElementById('explainBody'),t=document.querySelector('.explain-toggle'); if(!b)return; var h=b.style.display==='none'; b.style.display=h?'block':'none'; if(t)t.textContent=h?'Hide ▲':'Show ▼'; }
+  function saveToHistory()        { alert('Save function loading...'); }
+  function findHospitals()        { alert('Location service loading...'); }
+  function callEmergency()        { window.location.href='tel:108'; }
+  function addBodySymptom(a)      { var m={head:'headache',chest:'chest pain',stomach:'stomach pain',back:'back pain',throat:'sore throat',limbs:'body ache'}; var v=m[a]||a; if(!selectedTags.includes(v))selectedTags.push(v); document.getElementById('symptomInput').value=selectedTags.join(', '); document.querySelectorAll('.bzone').forEach(function(z){if(z.dataset.sym===v)z.classList.add('selected');}); }
+  function saveProfile()          { alert('Profile module loading...'); }
+  function clearHistory()         { if(confirm('Clear all records?')){localStorage.removeItem('arogyaHistory'); document.getElementById('historyList').innerHTML='<div class="no-data-msg">Cleared.</div>';} }
+  function deleteRecord(id)       {}
+  function calcBMI()              {}
+  function assessHR()             {}
+  function assessBP()             {}
+  function assessTemp()           {}
+  function assessSpo2()           {}
+  function addMedicine()          { alert('Medicine module loading...'); }
+  function deleteMed(id)          {}
+  function calcDosage()           {}
+  function saveAlertContact()     { alert('Doctor module loading...'); }
+  function exportData()           { alert('Privacy module loading...'); }
+  function deleteAllData()        { if(confirm('Delete all data?')){['arogyaProfile','arogyaHistory','arogyaMeds','arogyaAlertContact'].forEach(function(k){localStorage.removeItem(k);}); alert('Data deleted.');} }
+  function showToast(msg)         { var t=document.createElement('div'); t.textContent=msg; Object.assign(t.style,{position:'fixed',bottom:'24px',left:'50%',transform:'translateX(-50%)',background:'#0c1a13',color:'white',padding:'10px 20px',borderRadius:'20px',fontSize:'13px',fontWeight:'600',zIndex:'9998'}); document.body.appendChild(t); setTimeout(function(){t.remove();},2500); }
+</script>
+
+<!-- ░░ OFFLINE BANNER ░░ -->
+<div class="offline-bar" id="offlineBar">
+  📡 You are offline — ArogyaAI is running in offline mode. Data will sync when connected.
+</div>
+
+<!-- ░░ EMERGENCY OVERLAY ░░ -->
+<div class="emergency-overlay" id="emergencyOverlay">
+  <div class="emergency-modal">
+    <div class="em-pulse">🚨</div>
+    <h2 id="em-modal-title">CRITICAL EMERGENCY DETECTED</h2>
+    <p id="em-modal-desc">Your symptoms suggest a life-threatening condition. Act immediately.</p>
+    <div class="em-actions">
+      <a href="tel:108" class="em-btn red">📞 Call 108 — Ambulance</a>
+      <a href="tel:104" class="em-btn orange">📞 Call 104 — Health Helpline</a>
+      <button class="em-btn outline" onclick="closeEmergency()">Continue to Advice</button>
+    </div>
+    <div class="em-share">
+      <button onclick="shareLocation()" class="share-loc-btn">📍 Share My Location with Family</button>
+      <button onclick="sendSMSAlert()" class="share-loc-btn" style="margin-top:8px;border-color:#f87171;color:#f87171;">📲 Send SMS Alert to Emergency Contact</button>
+    </div>
+  </div>
+</div>
+
+<!-- ░░ HEADER ░░ -->
+<header>
+  <div class="logo">
+    <div class="logo-orb">
+      <!-- ArogyaAI Brand Logo SVG -->
+      <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="20" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+        <!-- Cross / health symbol -->
+        <rect x="19" y="10" width="6" height="24" rx="3" fill="white"/>
+        <rect x="10" y="19" width="24" height="6" rx="3" fill="white"/>
+        <!-- Leaf accent -->
+        <ellipse cx="32" cy="13" rx="4" ry="6" fill="#6ee7b7" opacity="0.8" transform="rotate(-40 32 13)"/>
+        <path d="M29 16 Q32 10 35 12" stroke="#0d6e3f" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-name">ArogyaAI</div>
+      <div class="logo-tagline">First-Mile Healthcare · Powered by AI</div>
+    </div>
+  </div>
+  <nav class="top-nav">
+    <button class="nav-btn active" onclick="showSection('home')" data-section="home">🏠 Home</button>
+    <button class="nav-btn" onclick="showSection('profile')" data-section="profile">👤 Profile</button>
+    <button class="nav-btn" onclick="showSection('history')" data-section="history">📋 History</button>
+    <button class="nav-btn" onclick="showSection('vitals')" data-section="vitals">💓 Vitals</button>
+    <button class="nav-btn" onclick="showSection('medicine')" data-section="medicine">💊 Meds</button>
+    <button class="nav-btn" onclick="showSection('doctor')" data-section="doctor">🧑‍⚕️ Doctor</button>
+    <button class="nav-btn" onclick="showSection('privacy')" data-section="privacy">🔐 Privacy</button>
+  </nav>
+  <div class="header-right">
+    <div class="offline-dot" id="offlineDot" title="Offline Mode Active"></div>
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('hi')">हिं</button>
+      <button class="lang-btn" onclick="setLang('te')">తె</button>
+    </div>
+  </div>
+</header>
+
+<!-- ░░ HERO ░░ -->
+<div class="hero" id="section-home">
+  <div class="hero-bg-mesh"></div>
+  <div class="hero-content">
+    <div class="hero-badge-top">🇮🇳 Designed for Bharat · Ayushman Bharat Ready</div>
+    <h1 class="hero-title" id="hero-title">आपका स्वास्थ्य,<br/><span class="hero-accent">हमारी जिम्मेदारी</span></h1>
+    <p class="hero-sub" id="hero-sub">AI-powered rural health assistant. Voice-first. Works offline. Saves lives.</p>
+
+    <!-- Government Partner Logos -->
+    <div class="hero-partner-logos">
+      <!-- Ayushman Bharat -->
+      <div class="partner-logo-chip">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="19" fill="#FF6B00"/>
+          <path d="M20 8 L20 32 M8 20 L32 20" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="5" fill="white"/>
+        </svg>
+        <span>Ayushman Bharat</span>
+      </div>
+      <!-- eSanjeevani -->
+      <div class="partner-logo-chip">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#1565C0"/>
+          <path d="M10 20 Q15 10 20 20 Q25 30 30 20" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="20" cy="20" r="3" fill="#64B5F6"/>
+        </svg>
+        <span>eSanjeevani</span>
+      </div>
+      <!-- ABDM -->
+      <div class="partner-logo-chip">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#1B5E20"/>
+          <path d="M12 28 L20 12 L28 28 M15 22 H25" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>ABDM</span>
+      </div>
+      <!-- NHM -->
+      <div class="partner-logo-chip">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="8" fill="#4527A0"/>
+          <path d="M10 30 L10 14 L20 24 L30 14 L30 30" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>NHM India</span>
+      </div>
+      <!-- Claude AI -->
+      <div class="partner-logo-chip">
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none">
+          <rect width="40" height="40" rx="20" fill="#D97706"/>
+          <path d="M14 26 Q14 14 20 14 Q26 14 26 20 Q26 26 20 28" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <circle cx="20" cy="32" r="2" fill="white"/>
+        </svg>
+        <span>Claude AI</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">600M+</span><span class="stat-label">Rural Indians Served</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">3</span><span class="stat-label">Languages</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Offline Ready</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">AI Assistant</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+  <!-- ░░ SECTION: HOME ░░ -->
+  <div class="section active" id="home-content">
+
+    <!-- Low Literacy Mode Toggle -->
+    <div class="feature-flag-bar">
+      <span>🗺️ Low-Literacy Mode</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="lowLiteracyToggle" onchange="toggleLowLiteracy()"/>
+        <span class="toggle-slider"></span>
+      </label>
+      <span>🔇 Voice Guidance</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="voiceGuidanceToggle"/>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <!-- Tech Stack Logos -->
+    <div class="tech-stack-bar">
+      <span class="tech-label">Built with:</span>
+      <!-- HTML5 -->
+      <div class="tech-chip" title="HTML5">
+        <svg width="18" height="18" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#E44D26"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#F16529"/><path d="M10 10h6v4H10.4l.4 4H16v4H9.2z" fill="white"/><path d="M16 10h6l-.4 4H16v4h5.2l-.6 6L16 25.6v-4.2l2.8-.8.2-2H16z" fill="#EBEBEB"/></svg>
+        <span>HTML5</span>
+      </div>
+      <!-- CSS3 -->
+      <div class="tech-chip" title="CSS3">
+        <svg width="18" height="18" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#1572B6"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#33A9DC"/><path d="M10 10h12l-.4 4H10.8l.2 2h10.4l-1 8L16 25.6l-4.4-1.2-.2-3h3.8l.2 1.4 .6.2.6-.2.4-3H9.8z" fill="white"/></svg>
+        <span>CSS3</span>
+      </div>
+      <!-- JavaScript -->
+      <div class="tech-chip" title="JavaScript">
+        <svg width="18" height="18" viewBox="0 0 32 32"><rect width="32" height="32" rx="3" fill="#F7DF1E"/><path d="M20 24c.4.8 1 1.4 2 1.4s1.6-.4 1.6-1.2c0-.8-.4-1.2-2-1.8-2-.8-3.2-1.8-3.2-3.8 0-2 1.6-3.6 4-3.6 1.8 0 3 .6 3.8 2l-2 1.4c-.4-.6-.8-1-1.8-1s-1.4.6-1.4 1.2c0 .8.4 1.2 2 1.8 2 .8 3.2 1.6 3.2 3.8 0 2.4-1.8 3.8-4.2 3.8-2 0-3.4-.8-4.2-2.4zM11 15.2h2.6V25.6c0 2.4-1.2 3.4-3 3.4-.6 0-1.2 0-1.8-.2l.4-2.2c.4.2.6.2 1 .2.6 0 .8-.4.8-1.2z" fill="#1A1A1A"/></svg>
+        <span>JavaScript</span>
+      </div>
+      <!-- Node.js -->
+      <div class="tech-chip" title="Node.js">
+        <svg width="18" height="18" viewBox="0 0 32 32"><path d="M16 2L3 9.5v13L16 30l13-7.5v-13z" fill="#339933"/><path d="M16 7l-8 4.6v9.2L16 25l8-4.2V11.6z" fill="#33691E"/><path d="M16 11a5 5 0 100 10 5 5 0 000-10z" fill="white"/><path d="M16 13a3 3 0 100 6 3 3 0 000-6z" fill="#339933"/></svg>
+        <span>Node.js</span>
+      </div>
+      <!-- Claude AI / Anthropic -->
+      <div class="tech-chip" title="Claude AI by Anthropic">
+        <svg width="18" height="18" viewBox="0 0 32 32"><rect width="32" height="32" rx="16" fill="#D97706"/><path d="M10 22 Q10 10 16 10 Q22 10 22 16 Q22 20 18 22" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="16" cy="26" r="2" fill="white"/></svg>
+        <span>Claude AI</span>
+      </div>
+      <!-- OpenStreetMap -->
+      <div class="tech-chip" title="OpenStreetMap">
+        <svg width="18" height="18" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#7EBC6F"/><path d="M6 24 Q10 16 16 18 Q20 20 24 12" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="16" cy="14" r="3" fill="#E84E4E"/><path d="M16 14 L16 22" stroke="#E84E4E" stroke-width="1.5"/></svg>
+        <span>OpenStreetMap</span>
+      </div>
+      <!-- Web Speech API -->
+      <div class="tech-chip" title="Web Speech API">
+        <svg width="18" height="18" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#4285F4"/><rect x="13" y="7" width="6" height="12" rx="3" fill="white"/><path d="M9 18 Q9 25 16 25 Q23 25 23 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="16" y1="25" x2="16" y2="29" stroke="white" stroke-width="2"/></svg>
+        <span>Speech API</span>
+      </div>
+    </div>
+
+    <!-- Voice Orb -->
+    <div class="voice-orb-wrap">
+      <div class="voice-orb" id="voiceOrb" onclick="toggleConversation()">
+        <div class="orb-rings">
+          <div class="orb-ring r1"></div>
+          <div class="orb-ring r2"></div>
+          <div class="orb-ring r3"></div>
+        </div>
+        <div class="orb-core">
+          <span class="orb-icon" id="orbIcon">🎤</span>
+          <span class="orb-label" id="orbLabel">Tap to Speak</span>
+        </div>
+      </div>
+      <div class="voice-transcript" id="voiceTranscript"></div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-bar">
+      ⚠️ <span id="disclaimer-text">General guidance only — <strong>not a substitute for professional medical advice</strong>. Always consult a doctor for serious conditions.</span>
+    </div>
+
+    <!-- Symptom Input Card -->
+    <div class="card glow-card" id="symptomCard">
+      <div class="card-header">
+        <div class="card-icon-wrap green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <div>
+          <div class="card-title" id="sym-title">Describe Your Symptoms</div>
+          <div class="card-sub">Type, speak, or tap symptoms below</div>
+        </div>
+      </div>
+
+      <!-- Body Map (Low Literacy) -->
+      <div class="body-map" id="bodyMap" style="display:none;">
+        <div class="body-map-title">👆 Tap where it hurts</div>
+        <div class="body-zones">
+          <div class="bzone" onclick="addBodySymptom('head')" data-sym="headache">🧠 Head</div>
+          <div class="bzone" onclick="addBodySymptom('chest')" data-sym="chest pain">❤️ Chest</div>
+          <div class="bzone" onclick="addBodySymptom('stomach')" data-sym="stomach pain">🫃 Stomach</div>
+          <div class="bzone" onclick="addBodySymptom('back')" data-sym="back pain">🫀 Back</div>
+          <div class="bzone" onclick="addBodySymptom('throat')" data-sym="sore throat">🗣️ Throat</div>
+          <div class="bzone" onclick="addBodySymptom('limbs')" data-sym="body ache">🦵 Limbs</div>
+        </div>
+      </div>
+
+      <div class="symptom-quick-wrap">
+        <div class="quick-label" id="quick-label">Quick select:</div>
+        <div class="symptom-tags" id="symptomTags"></div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-wrap">
+          <input type="text" id="symptomInput" class="symptom-input" placeholder="e.g. fever, headache, body ache..."/>
+          <div class="input-ai-badge">AI</div>
+        </div>
+        <button class="mic-fab" id="micBtn" onclick="toggleVoice()" title="Voice Input">🎤</button>
+      </div>
+
+      <!-- Severity Slider -->
+      <div class="severity-slider-wrap">
+        <label class="slider-label">How severe are your symptoms?</label>
+        <div class="severity-track">
+          <input type="range" min="1" max="10" value="5" id="severitySlider" class="sev-slider"/>
+          <div class="sev-markers"><span>Mild</span><span>Moderate</span><span>Severe</span></div>
+        </div>
+        <div class="sev-value" id="sevValue">5 / 10</div>
+      </div>
+
+      <!-- Duration -->
+      <div class="duration-row">
+        <span class="dur-label">Duration:</span>
+        <div class="dur-chips" id="durChips">
+          <span class="dur-chip selected" onclick="selectDuration(this,'Today')">Today</span>
+          <span class="dur-chip" onclick="selectDuration(this,'2-3 Days')">2-3 Days</span>
+          <span class="dur-chip" onclick="selectDuration(this,'1 Week')">1 Week</span>
+          <span class="dur-chip" onclick="selectDuration(this,'2+ Weeks')">2+ Weeks</span>
+        </div>
+      </div>
+
+      <button class="analyze-btn" id="analyzeBtn" onclick="analyzeSymptoms()">
+        <span class="btn-icon">🩺</span>
+        <span id="analyze-label">Analyze with AI</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div class="ai-loading" id="loading">
+      <div class="ai-brain">
+        <div class="brain-pulse"></div>
+        <span>🧠</span>
+      </div>
+      <p id="loading-text">AI is analyzing your symptoms...</p>
+      <div class="loading-steps" id="loadingSteps">
+        <div class="lstep active" id="ls1">🔍 Reading symptoms</div>
+        <div class="lstep" id="ls2">🧬 Matching conditions</div>
+        <div class="lstep" id="ls3">💡 Generating advice</div>
+        <div class="lstep" id="ls4">✅ Ready</div>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="card result-panel" id="resultPanel">
+      <div class="card-header">
+        <div class="card-icon-wrap blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
+        <div>
+          <div class="card-title" id="result-title">AI Diagnosis & Advice</div>
+          <div class="card-sub" id="result-timestamp"></div>
+        </div>
+      </div>
+      <div class="severity-badge-wrap">
+        <span class="severity-badge" id="severityBadge"></span>
+        <span class="confidence-badge" id="confidenceBadge"></span>
+      </div>
+      <div class="diagnosis-title" id="diagnosisTitle"></div>
+      <div class="explainable-ai-box" id="explainBox">
+        <div class="explain-header">🧠 Why this diagnosis? <span class="explain-toggle" onclick="toggleExplain()">Show ▼</span></div>
+        <div class="explain-body" id="explainBody" style="display:none;"></div>
+      </div>
+      <div class="diagnosis-desc" id="diagnosisDesc"></div>
+      <ul class="advice-list" id="adviceList"></ul>
+      <div class="result-actions">
+        <button class="action-btn" onclick="saveToHistory()">💾 Save to Health Record</button>
+        <button class="action-btn" onclick="window.print()">🖨️ Print Report</button>
+      </div>
+    </div>
+
+    <!-- Nearby Hospitals -->
+    <div class="card" id="hospitalCard">
+      <div class="card-header">
+        <div class="card-icon-wrap amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+        <div>
+          <div class="card-title" id="hosp-title">Smart Hospital Finder</div>
+          <div class="card-sub">Matched to your condition • Distance • Availability</div>
+        </div>
+      </div>
+      <button class="locate-btn" id="locateBtn" onclick="findHospitals()">
+        <span>📍</span> <span id="locate-label">Find Best Hospital For Me</span>
+      </button>
+      <div id="hospitalList"></div>
+    </div>
+
+    <!-- Health Tips -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-wrap green"><span style="font-size:20px;">💡</span></div>
+        <div><div class="card-title" id="tips-title">Health Awareness Engine</div><div class="card-sub">Personalized daily tips for you</div></div>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </div>
+
+  </div>
+
+  <!-- ░░ SECTION: PATIENT PROFILE ░░ -->
+  <div class="section" id="profile-content">
+    <div class="section-hero green-gradient">
+      <h2>👤 Patient Profile</h2>
+      <p>Your personal health identity — stored securely on your device</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Personal Information</div>
+      <div class="profile-form">
+        <div class="form-row">
+          <div class="form-group"><label>Full Name</label><input type="text" id="pName" placeholder="Enter your name" class="form-input"/></div>
+          <div class="form-group"><label>Age</label><input type="number" id="pAge" placeholder="Age" class="form-input"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Gender</label>
+            <select id="pGender" class="form-input">
+              <option value="">Select</option><option>Male</option><option>Female</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Blood Group</label>
+            <select id="pBlood" class="form-input">
+              <option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Village / Town</label><input type="text" id="pVillage" placeholder="Your location" class="form-input"/></div>
+          <div class="form-group"><label>Emergency Contact</label><input type="tel" id="pEmergency" placeholder="Phone number" class="form-input"/></div>
+        </div>
+        <div class="form-group full"><label>Known Allergies</label><input type="text" id="pAllergies" placeholder="e.g. Penicillin, Peanuts" class="form-input"/></div>
+        <div class="form-group full"><label>Existing Conditions</label><input type="text" id="pConditions" placeholder="e.g. Diabetes, Hypertension" class="form-input"/></div>
+        <button class="analyze-btn" onclick="saveProfile()" style="margin-top:16px;">💾 Save Profile</button>
+      </div>
+    </div>
+
+    <div class="card" id="profileSummaryCard" style="display:none;">
+      <div class="card-title">🪪 Health ID Card</div>
+      <div class="health-id-card" id="healthIDCard"></div>
+    </div>
+  </div>
+
+  <!-- ░░ SECTION: HISTORY ░░ -->
+  <div class="section" id="history-content">
+    <div class="section-hero blue-gradient">
+      <h2>📋 Personal Health Record</h2>
+      <p>Your complete health journey — Mini EHR</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Symptom Severity Tracker</div>
+        <button class="small-btn" onclick="clearHistory()">🗑️ Clear</button>
+      </div>
+      <div class="tracker-chart" id="trackerChart">
+        <div class="no-data-msg">No history yet. Start your first diagnosis! 🩺</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Past Diagnoses</div>
+      <div id="historyList"><div class="no-data-msg">No records found. Your diagnoses will appear here.</div></div>
+    </div>
+  </div>
+
+  <!-- ░░ SECTION: VITALS ░░ -->
+  <div class="section" id="vitals-content">
+    <div class="section-hero amber-gradient">
+      <h2>💓 Vitals & BMI Calculator</h2>
+      <p>Track your key health metrics</p>
+    </div>
+    <div class="vitals-grid">
+      <div class="card vital-card">
+        <div class="vital-icon">⚖️</div>
+        <div class="card-title">BMI Calculator</div>
+        <div class="form-group"><label>Height (cm)</label><input type="number" id="vHeight" placeholder="e.g. 165" class="form-input" oninput="calcBMI()"/></div>
+        <div class="form-group"><label>Weight (kg)</label><input type="number" id="vWeight" placeholder="e.g. 65" class="form-input" oninput="calcBMI()"/></div>
+        <div class="bmi-result" id="bmiResult"></div>
+        <div class="bmi-gauge-wrap" id="bmiGaugeWrap" style="display:none;">
+          <div class="bmi-gauge"><div class="bmi-needle" id="bmiNeedle"></div></div>
+          <div class="bmi-labels"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+        </div>
+      </div>
+      <div class="card vital-card">
+        <div class="vital-icon">🫀</div>
+        <div class="card-title">Heart Rate</div>
+        <div class="form-group"><label>BPM</label><input type="number" id="vHR" placeholder="e.g. 72" class="form-input" oninput="assessHR()"/></div>
+        <div class="vital-result" id="hrResult"></div>
+        <div class="vital-icon">🩺</div>
+        <div class="card-title" style="margin-top:16px;">Blood Pressure</div>
+        <div class="form-row">
+          <div class="form-group"><label>Systolic</label><input type="number" id="vSys" placeholder="120" class="form-input" oninput="assessBP()"/></div>
+          <div class="form-group"><label>Diastolic</label><input type="number" id="vDia" placeholder="80" class="form-input" oninput="assessBP()"/></div>
+        </div>
+        <div class="vital-result" id="bpResult"></div>
+      </div>
+      <div class="card vital-card">
+        <div class="vital-icon">🌡️</div>
+        <div class="card-title">Temperature</div>
+        <div class="form-group"><label>°F</label><input type="number" id="vTemp" placeholder="e.g. 98.6" class="form-input" oninput="assessTemp()"/></div>
+        <div class="vital-result" id="tempResult"></div>
+        <div class="vital-icon" style="margin-top:16px;">🩸</div>
+        <div class="card-title">Oxygen Saturation</div>
+        <div class="form-group"><label>SpO2 %</label><input type="number" id="vSpo2" placeholder="e.g. 98" class="form-input" oninput="assessSpo2()"/></div>
+        <div class="vital-result" id="spo2Result"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">IoT Device Status <span class="beta-chip">Future Ready</span></div>
+      <div class="iot-grid">
+        <div class="iot-device"><div class="iot-icon">⌚</div><div class="iot-name">Smartwatch</div><div class="iot-status disconnected">Not Connected</div></div>
+        <div class="iot-device"><div class="iot-icon">💊</div><div class="iot-name">Glucometer</div><div class="iot-status disconnected">Not Connected</div></div>
+        <div class="iot-device"><div class="iot-icon">🫀</div><div class="iot-name">ECG Patch</div><div class="iot-status disconnected">Not Connected</div></div>
+        <div class="iot-device"><div class="iot-icon">🩺</div><div class="iot-name">BP Monitor</div><div class="iot-status disconnected">Not Connected</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ SECTION: MEDICINE ░░ -->
+  <div class="section" id="medicine-content">
+    <div class="section-hero red-gradient">
+      <h2>💊 Medicine Dosage & Reminders</h2>
+      <p>Never miss a dose again</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Add Medicine</div>
+      <div class="form-row">
+        <div class="form-group"><label>Medicine Name</label><input type="text" id="medName" placeholder="e.g. Paracetamol" class="form-input"/></div>
+        <div class="form-group"><label>Dosage</label><input type="text" id="medDose" placeholder="e.g. 500mg" class="form-input"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Frequency</label>
+          <select id="medFreq" class="form-input">
+            <option>Once daily</option><option>Twice daily</option><option>Three times daily</option><option>Every 8 hours</option><option>As needed</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Time</label><input type="time" id="medTime" class="form-input"/></div>
+      </div>
+      <div class="form-group full"><label>Notes (optional)</label><input type="text" id="medNotes" placeholder="e.g. Take after food" class="form-input"/></div>
+      <button class="analyze-btn" onclick="addMedicine()" style="margin-top:8px;">➕ Add Medicine</button>
+    </div>
+    <div class="card">
+      <div class="card-title">My Medicines</div>
+      <div id="medList"><div class="no-data-msg">No medicines added yet.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💉 Dosage Calculator</div>
+      <div class="form-row">
+        <div class="form-group"><label>Patient Weight (kg)</label><input type="number" id="dcWeight" placeholder="65" class="form-input" oninput="calcDosage()"/></div>
+        <div class="form-group"><label>Medicine</label>
+          <select id="dcMed" class="form-input" onchange="calcDosage()">
+            <option value="">Select</option>
+            <option data-dose="15">Paracetamol (15mg/kg)</option>
+            <option data-dose="10">Ibuprofen (10mg/kg)</option>
+            <option data-dose="25">Amoxicillin (25mg/kg)</option>
+            <option data-dose="5">ORS (5ml/kg/hour)</option>
+          </select>
+        </div>
+      </div>
+      <div class="dosage-result" id="dosageResult"></div>
+    </div>
+  </div>
+
+  <!-- ░░ SECTION: DOCTOR CONNECT ░░ -->
+  <div class="section" id="doctor-content">
+    <div class="section-hero" style="background:linear-gradient(135deg,#0369a1,#075985);">
+      <h2>🧑‍⚕️ Doctor Connect</h2>
+      <p>Consult a real doctor · Free government telemedicine · eSanjeevani ready</p>
+    </div>
+
+    <!-- Auto Alert System -->
+    <div class="card alert-card">
+      <div class="card-header">
+        <div class="card-icon-wrap red"><span style="font-size:22px;">🚨</span></div>
+        <div><div class="card-title">Auto Emergency Alert System</div><div class="card-sub">Send instant SMS + location to your emergency contact</div></div>
+      </div>
+      <div class="alert-status" id="alertStatus">
+        <div class="alert-status-dot idle"></div>
+        <span id="alertStatusText">Ready — alert will trigger on emergency detection</span>
+      </div>
+      <div class="form-row" style="margin-top:14px;">
+        <div class="form-group">
+          <label>Emergency Contact Name</label>
+          <input type="text" id="alertName" class="form-input" placeholder="e.g. Ramesh (Brother)"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="alertPhone" class="form-input" placeholder="+91 98765 43210"/>
+        </div>
+      </div>
+      <button class="analyze-btn" onclick="saveAlertContact()" style="margin-top:8px;background:linear-gradient(135deg,#dc2626,#991b1b);">
+        <span class="btn-icon">📲</span> <span>Save & Test Alert System</span> <span class="btn-arrow">→</span>
+      </button>
+      <div class="alert-explain">
+        <strong>🔥 How it works:</strong> When a critical emergency is detected (chest pain, stroke, etc.), ArogyaAI automatically:<br/>
+        1️⃣ Opens SMS with pre-filled emergency message + your GPS location<br/>
+        2️⃣ Shows Call 108 button for ambulance<br/>
+        3️⃣ Displays nearest emergency hospital
+      </div>
+    </div>
+
+    <!-- eSanjeevani -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-wrap blue"><span style="font-size:22px;">🏥</span></div>
+        <div><div class="card-title">Government Telemedicine</div><div class="card-sub">Free online doctor consultation — powered by eSanjeevani</div></div>
+      </div>
+      <div class="doctor-grid">
+        <div class="doctor-card">
+          <div class="doctor-icon">🩺</div>
+          <div class="doctor-name">General Physician</div>
+          <div class="doctor-meta">Available 9AM – 9PM</div>
+          <div class="doctor-badge free">Free</div>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
+        </div>
+        <div class="doctor-card">
+          <div class="doctor-icon">👶</div>
+          <div class="doctor-name">Paediatrician</div>
+          <div class="doctor-meta">Child health specialist</div>
+          <div class="doctor-badge free">Free</div>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
+        </div>
+        <div class="doctor-card">
+          <div class="doctor-icon">🦷</div>
+          <div class="doctor-name">Dental Advisor</div>
+          <div class="doctor-meta">Oral health guidance</div>
+          <div class="doctor-badge free">Free</div>
+          <a href="https://esanjeevaniopd.in" target="_blank" class="doctor-btn">Connect via eSanjeevani</a>
+        </div>
+        <div class="doctor-card">
+          <div class="doctor-icon">🧠</div>
+          <div class="doctor-name">Mental Health</div>
+          <div class="doctor-meta">Counselling & support</div>
+          <div class="doctor-badge free">Free · iCall</div>
+          <a href="https://icallhelpline.org" target="_blank" class="doctor-btn">Connect via iCall</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASHA Worker -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-wrap green"><span style="font-size:22px;">👩‍⚕️</span></div>
+        <div><div class="card-title">Your ASHA Health Worker</div><div class="card-sub">Community health worker at your doorstep</div></div>
+      </div>
+      <div class="asha-info">
+        <div class="asha-row"><span>📞</span><div><strong>National ASHA Helpline:</strong><br/>Call <a href="tel:104" style="color:var(--g2);font-weight:700;">104</a> — Free, available in regional languages</div></div>
+        <div class="asha-row"><span>🏥</span><div><strong>Ayushman Bharat PM-JAY:</strong><br/>Free health coverage up to ₹5 lakh/year for eligible families. <a href="https://pmjay.gov.in" target="_blank" style="color:var(--g2);">Check eligibility →</a></div></div>
+        <div class="asha-row"><span>📱</span><div><strong>eSanjeevani Mobile App:</strong><br/>Download for free video consultation with govt doctors</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ░░ SECTION: PRIVACY ░░ -->
+  <div class="section" id="privacy-content">
+    <div class="section-hero" style="background:linear-gradient(135deg,#374151,#111827);">
+      <h2>🔐 Data Privacy & Security</h2>
+      <p>Your health data stays on your device — we never sell or share it</p>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon-wrap green"><span style="font-size:22px;">🛡️</span></div>
+        <div><div class="card-title">Privacy Commitment</div><div class="card-sub">ArogyaAI is built privacy-first for rural communities</div></div>
+      </div>
+      <div class="privacy-grid">
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>Local Storage Only</strong><br/>All your health records, profile and medicines are stored only on your device.</div></div>
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>No Account Required</strong><br/>Use ArogyaAI without creating an account. Your identity is never collected.</div></div>
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>Offline First</strong><br/>Core diagnosis works without internet. Your data never leaves your phone.</div></div>
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>No Ads, No Tracking</strong><br/>Zero advertising. No analytics trackers. No third-party data sharing.</div></div>
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>Encrypted Storage</strong><br/>Sensitive data is encoded before saving to localStorage.</div></div>
+        <div class="privacy-item yes"><span class="pi-icon">✅</span><div><strong>You Control Your Data</strong><br/>Export or delete all your data at any time with one tap.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🗂️ Manage Your Data</div>
+      <div class="data-actions">
+        <button class="data-btn export" onclick="exportData()">📤 Export All My Data (JSON)</button>
+        <button class="data-btn danger" onclick="deleteAllData()">🗑️ Delete All My Data</button>
+      </div>
+      <div class="data-summary" id="dataSummary"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 What Data We Store</div>
+      <div class="data-table">
+        <div class="dt-row header"><span>Data Type</span><span>Where Stored</span><span>Shared?</span></div>
+        <div class="dt-row"><span>Patient Profile</span><span>Device Only</span><span class="no-share">Never</span></div>
+        <div class="dt-row"><span>Diagnosis History</span><span>Device Only</span><span class="no-share">Never</span></div>
+        <div class="dt-row"><span>Medicine Reminders</span><span>Device Only</span><span class="no-share">Never</span></div>
+        <div class="dt-row"><span>Symptom Input</span><span>Sent to AI (anonymous)</span><span class="warn-share">AI only, not stored</span></div>
+        <div class="dt-row"><span>Location</span><span>Used locally for maps</span><span class="no-share">Never</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏛️ Scalable to Government Systems</div>
+      <div class="govt-grid">
+        <div class="govt-item">
+          <div class="govt-logo">
+            <svg width="36" height="36" viewBox="0 0 50 50" fill="none"><circle cx="25" cy="25" r="24" fill="#FF6B00"/><path d="M25 10 L25 40 M10 25 L40 25" stroke="white" stroke-width="5" stroke-linecap="round"/><circle cx="25" cy="25" r="7" fill="white"/></svg>
+          </div>
+          <div><strong>Ayushman Bharat</strong><br/><span>Future API integration ready</span></div>
+        </div>
+        <div class="govt-item">
+          <div class="govt-logo">
+            <svg width="36" height="36" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#1565C0"/><path d="M10 28 Q17 10 25 28 Q33 42 40 25" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="25" cy="25" r="4" fill="#90CAF9"/></svg>
+          </div>
+          <div><strong>ABDM (Health ID)</strong><br/><span>Abha ID linkage planned</span></div>
+        </div>
+        <div class="govt-item">
+          <div class="govt-logo">
+            <svg width="36" height="36" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#1B5E20"/><rect x="21" y="10" width="8" height="30" rx="4" fill="white"/><rect x="10" y="21" width="30" height="8" rx="4" fill="white"/><circle cx="39" cy="12" r="6" fill="#A5D6A7"/></svg>
+          </div>
+          <div><strong>eSanjeevani</strong><br/><span>Telemedicine bridge ready</span></div>
+        </div>
+        <div class="govt-item">
+          <div class="govt-logo">
+            <svg width="36" height="36" viewBox="0 0 50 50" fill="none"><rect width="50" height="50" rx="10" fill="#4527A0"/><path d="M10 38 L10 16 L25 30 L40 16 L40 38" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M18 38 L18 28 L25 34 L32 28 L32 38" stroke="#CE93D8" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><strong>HMIS Integration</strong><br/><span>Govt health data portal</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-wrap -->
+
+<!-- ░░ FOOTER ░░ -->
+<footer>
+  <div class="footer-inner">
+
+    <!-- App Brand -->
+    <div class="footer-brand">
+      <svg width="32" height="32" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+        <rect x="19" y="10" width="6" height="24" rx="3" fill="white"/>
+        <rect x="10" y="19" width="24" height="6" rx="3" fill="white"/>
+        <ellipse cx="32" cy="13" rx="4" ry="6" fill="#6ee7b7" opacity="0.7" transform="rotate(-40 32 13)"/>
+      </svg>
+      <div>
+        <div class="footer-logo">ArogyaAI</div>
+        <div class="footer-tagline">First-Mile Healthcare Solution</div>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- Hackathon Info -->
+    <div class="footer-hack-info">
+      <div class="footer-hack-badge">
+        <!-- IIT BHU Logo SVG -->
+        <svg width="28" height="28" viewBox="0 0 50 50" fill="none" title="IIT BHU">
+          <circle cx="25" cy="25" r="24" fill="#8B0000" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+          <path d="M14 36 L14 18 L25 12 L36 18 L36 36" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="20" y="26" width="10" height="10" rx="1" fill="white" opacity="0.9"/>
+          <path d="M19 18 L25 14 L31 18" stroke="#FFD700" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <circle cx="25" cy="22" r="3" fill="#FFD700"/>
+        </svg>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:white;">Codecure @ SPIRIT'26</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">IIT (BHU) Varanasi · Team InnovX</div>
+        </div>
+      </div>
+      <div class="footer-hack-badge">
+        <!-- Anthropic / Claude Logo -->
+        <svg width="28" height="28" viewBox="0 0 50 50" fill="none">
+          <rect width="50" height="50" rx="25" fill="#D97706"/>
+          <path d="M14 32 Q14 14 25 14 Q36 14 36 24 Q36 32 28 34" stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="25" cy="39" r="3" fill="white"/>
+        </svg>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:white;">Powered by Claude AI</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">Anthropic · claude-sonnet-4</div>
+        </div>
+      </div>
+      <div class="footer-hack-badge">
+        <!-- Ayushman Bharat Logo -->
+        <svg width="28" height="28" viewBox="0 0 50 50" fill="none">
+          <circle cx="25" cy="25" r="24" fill="#FF6B00"/>
+          <path d="M25 12 L25 38 M12 25 L38 25" stroke="white" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="25" cy="25" r="6" fill="white"/>
+        </svg>
+        <div>
+          <div style="font-weight:700;font-size:13px;color:white;">Ayushman Bharat Ready</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.55);">PM-JAY · ABDM · eSanjeevani</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <!-- Tech Stack Logos -->
+    <div class="footer-tech">
+      <span style="font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;">Tech Stack</span>
+      <div class="footer-tech-icons">
+        <span title="HTML5"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#E44D26"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#F16529"/><path d="M10 10h6v4H10.4l.4 4H16v4H9.2z" fill="white"/><path d="M16 10h6l-.4 4H16v4h5.2l-.6 6L16 25.6v-4.2l2.8-.8.2-2H16z" fill="#EBEBEB"/></svg></span>
+        <span title="CSS3"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#1572B6"/><path d="M16 28.4V4H26.4L24.4 26z" fill="#33A9DC"/><path d="M10 10h12l-.4 4H10.8l.2 2h10.4l-1 8L16 25.6l-4.4-1.2-.2-3h3.8l.2 1.4 .6.2.6-.2.4-3H9.8z" fill="white"/></svg></span>
+        <span title="JavaScript"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="3" fill="#F7DF1E"/><path d="M20 24c.4.8 1 1.4 2 1.4s1.6-.4 1.6-1.2c0-.8-.4-1.2-2-1.8-2-.8-3.2-1.8-3.2-3.8 0-2 1.6-3.6 4-3.6 1.8 0 3 .6 3.8 2l-2 1.4c-.4-.6-.8-1-1.8-1s-1.4.6-1.4 1.2c0 .8.4 1.2 2 1.8 2 .8 3.2 1.6 3.2 3.8 0 2.4-1.8 3.8-4.2 3.8-2 0-3.4-.8-4.2-2.4zM11 15.2h2.6V25.6c0 2.4-1.2 3.4-3 3.4-.6 0-1.2 0-1.8-.2l.4-2.2c.4.2.6.2 1 .2.6 0 .8-.4.8-1.2z" fill="#1A1A1A"/></svg></span>
+        <span title="Node.js"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M16 2L3 9.5v13L16 30l13-7.5v-13z" fill="#339933"/><circle cx="16" cy="16" r="5" fill="white"/><circle cx="16" cy="16" r="3" fill="#339933"/></svg></span>
+        <span title="Claude AI"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="16" fill="#D97706"/><path d="M10 22 Q10 10 16 10 Q22 10 22 16 Q22 20 18 22" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/><circle cx="16" cy="26" r="2" fill="white"/></svg></span>
+        <span title="OpenStreetMap"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#7EBC6F"/><path d="M6 24 Q10 14 16 17 Q20 19 24 10" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="14" cy="11" r="3" fill="#E84E4E"/></svg></span>
+        <span title="Web Speech API"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#4285F4"/><rect x="13" y="7" width="6" height="11" rx="3" fill="white"/><path d="M9 17 Q9 24 16 24 Q23 24 23 17" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="16" y1="24" x2="16" y2="28" stroke="white" stroke-width="2"/></svg></span>
+        <span title="PWA / Service Worker"><svg width="20" height="20" viewBox="0 0 32 32"><rect width="32" height="32" rx="4" fill="#5C6BC0"/><path d="M8 20 L14 10 L20 18 L24 14 L28 22" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </div>
+
+    <div class="footer-divider"></div>
+    <div class="emergency-strip">🚑 <strong>108</strong> Ambulance &nbsp;·&nbsp; 🏥 <strong>104</strong> Health Helpline &nbsp;·&nbsp; 👮 <strong>100</strong> Police &nbsp;·&nbsp; 🆘 <strong>112</strong> National Emergency</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:12px;">© 2026 ArogyaAI · Team InnovX · MIT License · Not a substitute for professional medical advice</div>
+  </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="js/languages.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/diagnosis.js"></script>
+<script src="js/hospitals.js"></script>
+<script src="js/vitals.js"></script>
+<script src="js/medicine.js"></script>
+<script src="js/history.js"></script>
+<script src="js/doctor.js"></script>
+<script src="js/privacy.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Register Service Worker only when hosted (not in preview/iframe environments)
+  if ('serviceWorker' in navigator &&
+      window.location.protocol === 'https:' &&
+      !window.location.hostname.includes('claudeusercontent.com') &&
+      !window.location.hostname.includes('localhost') === false) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('ArogyaAI PWA: Service Worker registered ✅'))
+      .catch(() => {});
+  }
+</script>
+
+</body>
+</html>
