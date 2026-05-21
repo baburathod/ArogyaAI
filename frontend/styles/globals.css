@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #0f8c51;
+  --accent-strong: #07542f;
+  --surface: rgba(255,255,255,0.92);
+}
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-[#eef9f1] via-[#eff6ff] to-[#e9f4e8] text-[#072a18];
+  }
+}
+
+.card {
+  @apply bg-[color:var(--surface)] border border-[rgba(15,38,23,0.08)] rounded-lg-card p-6 shadow-glass;
+}
+
+.nav-link {
+  @apply text-sm font-medium text-[#0f2f1f] hover:text-[color:var(--accent)];
+}
