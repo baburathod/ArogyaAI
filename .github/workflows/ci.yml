@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install backend deps
+        working-directory: ./backend
+        run: npm ci
+      - name: Type check backend
+        working-directory: ./backend
+        run: npm run type-check
+      - name: Lint backend
+        working-directory: ./backend
+        run: npm run lint
+      - name: Test backend
+        working-directory: ./backend
+        run: npm run test:run
+      - name: Build backend
+        working-directory: ./backend
+        run: npm run build
+
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install frontend deps
+        working-directory: ./frontend
+        run: npm ci
+      - name: Type check frontend
+        working-directory: ./frontend
+        run: npm run type-check || true
+      - name: Lint frontend
+        working-directory: ./frontend
+        run: npm run lint || true
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build
+      - name: Run frontend unit tests
+        working-directory: ./frontend
+        run: npm run test:run
+      - name: Run frontend E2E tests
+        working-directory: ./frontend
+        run: npm run e2e --if-present
